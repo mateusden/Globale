@@ -151,7 +151,7 @@ export default function Home() {
           const isLastSubmittedRow = submitted && rowIdx === guesses.length - 1;
 
           return (
-            <div className="flex gap-1 sm:gap-1.5" key={rowIdx}>
+            <div className="flex gap-0.5 sm:gap-1" key={rowIdx}>
               {displayLetters.split("").map((ch, colIdx) => {
                 const state = submitted ? submitted.result[colIdx] : "";
                 const bg =
@@ -165,10 +165,10 @@ export default function Home() {
 
                 return (
                   <span key={colIdx} className="flex gap-1">
-                    {wordBreaks.includes(colIdx) && <span className="w-3" />}
+                    {wordBreaks.includes(colIdx) && <span className="w-2 sm:w-3" />}
                     <span
                       style={isLastSubmittedRow ? { animationDelay: `${colIdx * 150}ms` } : {}}
-                      className={`w-9 h-9 sm:w-12 sm:h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
+                      className={`w-8 h-9 sm:w-12 sm:h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
                         isLastSubmittedRow ? "tile-flip" : ""
                       }`}
                     >
