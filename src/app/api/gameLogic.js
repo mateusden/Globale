@@ -1,0 +1,58 @@
+import { COUNTRIES } from "./countries";
+
+export function normalize(s) {
+  return s.toUpperCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^A-Z]/g, "");
+}
+
+export function getWordBreaks(rawName) {
+  const upper = rawName.toUpperCase();
+  const breaks = [];
+  let letterCount = 0;
+  for (const ch of upper) {
+    if (ch === " ") breaks.push(letterCount);
+    else letterCount++;
+  }
+  return breaks;
+}
+
+export function dailySeed() {
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = (hash * 31 + dateStr.charCodeAt(i)) >>> 0;
+  }
+  return hash;
+}
+
+export function evaluateGuess(guess, secret) {
+  const result = new Array(guess.length).fill("absent");
+  const secretArr = secret.split("");
+  const guessArr = guess.split("");
+  const used = new Array(secretArr.length).fill(false);
+
+  for (let i = 0; i < guessArr.length; i++) {
+    if (guessArr[i] === secretArr[i]) {
+      result[i] = "correct";
+      used[i] = true;
+    }
+  }
+  for (let i = 0; i < guessArr.length; i++) {
+    if (result[i] === "correct") continue;
+    for (let j = 0; j < secretArr.length; j++) {
+      if (!used[j] && guessArr[i] === secretArr[j]) {
+        result[i] = "present";
+        used[j] = true;
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+export function getSecretOfTheDay() {
+  const idx = dailySeed() % COUNTRIES.length;
+  return COUNTRIES[idx];
+}

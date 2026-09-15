@@ -1,69 +1,203 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { todayKey } from "./utils";
+import GlobaleTitle from "./GlobaleTitle";
+import Keyboard from "./keyboard";
+
+const MAX_GUESSES = 6;
 
 export default function Home() {
+  const [secretLength, setSecretLength] = useState(null);
+  const [wordBreaks, setWordBreaks] = useState([]);
+  const [rawSecret, setRawSecret] = useState(""); // só preenchido quando revelado
+  const [guesses, setGuesses] = useState([]);
+  const [current, setCurrent] = useState("");
+  const [gameOver, setGameOver] = useState(false);
+  const [message, setMessage] = useState("");
+  const [keyStates, setKeyStates] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  // Busca as infos do dia no servidor (tamanho da palavra, etc)
+  useEffect(() => {
+    async function loadWordInfo() {
+      const res = await fetch("/api/word-info");
+      const data = await res.json();
+      setSecretLength(data.length);
+      setWordBreaks(data.wordBreaks);
+
+      // tenta carregar progresso salvo
+      const saved = localStorage.getItem(todayKey());
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.secretLength === data.length) {
+          setGuesses(parsed.guesses);
+          setGameOver(parsed.gameOver);
+          setKeyStates(parsed.keyStates);
+          setRawSecret(parsed.rawSecret || "");
+          if (parsed.gameOver) setMessage(parsed.message);
+        } else {
+          localStorage.removeItem(todayKey());
+        }
+      }
+    }
+    loadWordInfo();
+  }, []);
+
+  // Salva progresso
+  useEffect(() => {
+    if (guesses.length === 0) return;
+    localStorage.setItem(
+      todayKey(),
+      JSON.stringify({ guesses, gameOver, keyStates, message, rawSecret, secretLength })
+    );
+  }, [guesses, gameOver, keyStates, message, rawSecret, secretLength]);
+
+  const submitGuess = useCallback(async () => {
+    if (gameOver || !secretLength || loading) return;
+    if (current.length !== secretLength) {
+      setMessage(`Digite um país com ${secretLength} letras.`);
+      return;
+    }
+
+    setLoading(true);
+    const res = await fetch("/api/guess", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ guess: current }),
+    });
+    const data = await res.json();
+    setLoading(false);
+
+    if (data.error) {
+      setMessage(data.error);
+      return;
+    }
+
+    const newGuesses = [...guesses, { guess: current.toUpperCase(), result: data.result }];
+    setGuesses(newGuesses);
+    setCurrent("");
+    setMessage("");
+
+    setKeyStates((prev) => {
+      const updated = { ...prev };
+      const rank = { absent: 0, present: 1, correct: 2 };
+      current.toUpperCase().split("").forEach((ch, i) => {
+        const state = data.result[i];
+        if (!updated[ch] || rank[state] > rank[updated[ch]]) {
+          updated[ch] = state;
+        }
+      });
+      return updated;
+    });
+
+    const revealTime = secretLength * 150 + 400;
+
+    if (data.won) {
+      setGameOver(true);
+      setRawSecret(data.revealedSecret);
+      setTimeout(() => setMessage(`Isso! Era ${data.revealedSecret}.`), revealTime);
+    } else if (newGuesses.length >= MAX_GUESSES) {
+      setGameOver(true);
+      // busca a resposta certa só agora que perdeu, numa rota separada
+      const revealRes = await fetch("/api/reveal");
+      const revealData = await revealRes.json();
+      setRawSecret(revealData.secret);
+      setTimeout(() => setMessage(`Não foi dessa vez. Era ${revealData.secret}.`), revealTime);
+    }
+  }, [current, secretLength, guesses, gameOver, loading]);
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (gameOver || !secretLength) return;
+      if (e.key === "Enter") submitGuess();
+      else if (e.key === "Backspace") setCurrent((c) => c.slice(0, -1));
+      else if (/^[a-zA-Z]$/.test(e.key) && current.length < secretLength) {
+        setCurrent((c) => c + e.key.toUpperCase());
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [gameOver, submitGuess, current, secretLength]);
+
+  const handleKeyPress = (ch) => {
+    if (gameOver || !secretLength) return;
+    if (current.length < secretLength) setCurrent((c) => c + ch);
+  };
+
+  const handleBackspace = () => {
+    if (gameOver) return;
+    setCurrent((c) => c.slice(0, -1));
+  };
+
+  if (!secretLength) return <div className="p-8 text-white">Carregando...</div>;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.js
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center p-8 gap-4">
+      <GlobaleTitle />
+      <p className="text-slate-400 text-sm">
+        {secretLength} letras, em {wordBreaks.length + 1} palavra(s).
+      </p>
+
+      <div className="flex flex-col gap-1.5">
+        {Array.from({ length: MAX_GUESSES }).map((_, rowIdx) => {
+          const submitted = guesses[rowIdx];
+          const displayLetters = submitted
+            ? submitted.guess
+            : rowIdx === guesses.length
+              ? current.padEnd(secretLength, " ")
+              : "".padEnd(secretLength, " ");
+
+          const isLastSubmittedRow = submitted && rowIdx === guesses.length - 1;
+
+          return (
+            <div className="flex gap-1.5" key={rowIdx}>
+              {displayLetters.split("").map((ch, colIdx) => {
+                const state = submitted ? submitted.result[colIdx] : "";
+                const bg =
+                  state === "correct"
+                    ? "bg-green-700 border-green-700"
+                    : state === "present"
+                      ? "bg-yellow-700 border-yellow-700"
+                      : state === "absent"
+                        ? "bg-slate-700 border-slate-700"
+                        : "bg-slate-900 border-slate-600";
+
+                return (
+                  <span key={colIdx} className="flex gap-1">
+                    {wordBreaks.includes(colIdx) && <span className="w-3" />}
+                    <span
+                      style={isLastSubmittedRow ? { animationDelay: `${colIdx * 150}ms` } : {}}
+                      className={`w-12 h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
+                        isLastSubmittedRow ? "tile-flip" : ""
+                      }`}
+                    >
+                      {ch.trim()}
+                    </span>
+                  </span>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+
+      <button
+        onClick={submitGuess}
+        disabled={loading}
+        className="bg-amber-400 hover:bg-amber-300 text-yellow-900 hover:text-yellow-800 disabled:opacity-50 px-5 py-2 rounded-sm text-lg font-bold mt-2"
+      >
+        {loading ? "..." : "Enviar"}
+      </button>
+
+      <Keyboard
+        onKeyPress={handleKeyPress}
+        onEnter={submitGuess}
+        onBackspace={handleBackspace}
+        keyStates={keyStates}
+      />
+
+      <p className="text-sm h-6">{message}</p>
     </div>
   );
 }
