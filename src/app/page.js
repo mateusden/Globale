@@ -139,7 +139,7 @@ export default function Home() {
         {secretLength} letras, em {wordBreaks.length + 1} palavra(s).
       </p>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1 sm:gap-1.5">
         {Array.from({ length: MAX_GUESSES }).map((_, rowIdx) => {
           const submitted = guesses[rowIdx];
           const displayLetters = submitted
@@ -151,7 +151,7 @@ export default function Home() {
           const isLastSubmittedRow = submitted && rowIdx === guesses.length - 1;
 
           return (
-            <div className="flex gap-1.5" key={rowIdx}>
+            <div className="flex gap-1 sm:gap-1.5" key={rowIdx}>
               {displayLetters.split("").map((ch, colIdx) => {
                 const state = submitted ? submitted.result[colIdx] : "";
                 const bg =
@@ -168,7 +168,7 @@ export default function Home() {
                     {wordBreaks.includes(colIdx) && <span className="w-3" />}
                     <span
                       style={isLastSubmittedRow ? { animationDelay: `${colIdx * 150}ms` } : {}}
-                      className={`w-12 h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
+                      className={`w-9 h-9 sm:w-12 sm:h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
                         isLastSubmittedRow ? "tile-flip" : ""
                       }`}
                     >

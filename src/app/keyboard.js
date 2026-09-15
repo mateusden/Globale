@@ -2,13 +2,13 @@ const ROWS = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
 
 export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyStates }) {
   return (
-    <div className="flex flex-col gap-2 mt-4">
+    <div className="flex flex-col gap-1.5 sm:gap-2 mt-4">
       {ROWS.map((row, rowIdx) => (
-        <div className="flex gap-2 justify-center" key={rowIdx}>
+        <div className="flex gap-1.5 sm:gap-2 justify-center" key={rowIdx}>
           {rowIdx === ROWS.length - 1 && (
             <button
               onClick={onEnter}
-              className="px-4 py-2 text-sm font-bold bg-slate-700 text-yellow-100 rounded hover:bg-slate-600"
+              className="px-3 py-1 sm:px-4 sm:py-2 text-sm font-bold bg-slate-700 text-yellow-100 rounded hover:bg-slate-600"
             >
               ENVIAR
             </button>
@@ -28,7 +28,7 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyStates }
               <button
                 key={ch}
                 onClick={() => onKeyPress(ch)}
-                className={`w-11 h-11 text-yellow-100 text-sm font-bold rounded ${bg}`}
+                className={`sm:w-11 sm:h-11 h-10 w-10 text-yellow-100 text-sm font-bold rounded ${bg}`}
               >
                 {ch}
               </button>
@@ -38,7 +38,7 @@ export default function Keyboard({ onKeyPress, onEnter, onBackspace, keyStates }
           {rowIdx === ROWS.length - 1 && (
             <button
               onClick={onBackspace}
-              className="px-4 py-2 text-sm text-yellow-100 font-bold bg-slate-700 rounded hover:bg-slate-600"
+              className="px-3 sm:px-4 py-1 sm:py-2 text-sm text-yellow-100 font-bold bg-slate-700 rounded hover:bg-slate-600"
             >
               APAGAR
             </button>
