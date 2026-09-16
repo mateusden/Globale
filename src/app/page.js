@@ -49,7 +49,14 @@ export default function Home() {
     if (guesses.length === 0) return;
     localStorage.setItem(
       todayKey(),
-      JSON.stringify({ guesses, gameOver, keyStates, message, rawSecret, secretLength })
+      JSON.stringify({
+        guesses,
+        gameOver,
+        keyStates,
+        message,
+        rawSecret,
+        secretLength,
+      }),
     );
   }, [guesses, gameOver, keyStates, message, rawSecret, secretLength]);
 
@@ -74,7 +81,10 @@ export default function Home() {
       return;
     }
 
-    const newGuesses = [...guesses, { guess: current.toUpperCase(), result: data.result }];
+    const newGuesses = [
+      ...guesses,
+      { guess: current.toUpperCase(), result: data.result },
+    ];
     setGuesses(newGuesses);
     setCurrent("");
     setMessage("");
@@ -82,12 +92,15 @@ export default function Home() {
     setKeyStates((prev) => {
       const updated = { ...prev };
       const rank = { absent: 0, present: 1, correct: 2 };
-      current.toUpperCase().split("").forEach((ch, i) => {
-        const state = data.result[i];
-        if (!updated[ch] || rank[state] > rank[updated[ch]]) {
-          updated[ch] = state;
-        }
-      });
+      current
+        .toUpperCase()
+        .split("")
+        .forEach((ch, i) => {
+          const state = data.result[i];
+          if (!updated[ch] || rank[state] > rank[updated[ch]]) {
+            updated[ch] = state;
+          }
+        });
       return updated;
     });
 
@@ -96,14 +109,20 @@ export default function Home() {
     if (data.won) {
       setGameOver(true);
       setRawSecret(data.revealedSecret);
-      setTimeout(() => setMessage(`Isso! Era ${data.revealedSecret}.`), revealTime);
+      setTimeout(
+        () => setMessage(`Isso! Era ${data.revealedSecret}.`),
+        revealTime,
+      );
     } else if (newGuesses.length >= MAX_GUESSES) {
       setGameOver(true);
       // busca a resposta certa só agora que perdeu, numa rota separada
       const revealRes = await fetch("/api/reveal");
       const revealData = await revealRes.json();
       setRawSecret(revealData.secret);
-      setTimeout(() => setMessage(`Não foi dessa vez. Era ${revealData.secret}.`), revealTime);
+      setTimeout(
+        () => setMessage(`Não foi dessa vez. Era ${revealData.secret}.`),
+        revealTime,
+      );
     }
   }, [current, secretLength, guesses, gameOver, loading]);
 
@@ -138,48 +157,56 @@ export default function Home() {
       <p className="text-slate-400 text-sm">
         {secretLength} letras, em {wordBreaks.length + 1} palavra(s).
       </p>
+      <div className="w-full overflow-x-auto px-2">
+        <div className="flex flex-col gap-1 sm:gap-1.5 w-fit mx-auto">
+          {Array.from({ length: MAX_GUESSES }).map((_, rowIdx) => {
+            const submitted = guesses[rowIdx];
+            const displayLetters = submitted
+              ? submitted.guess
+              : rowIdx === guesses.length
+                ? current.padEnd(secretLength, " ")
+                : "".padEnd(secretLength, " ");
 
-      <div className="flex flex-col gap-1 sm:gap-1.5">
-        {Array.from({ length: MAX_GUESSES }).map((_, rowIdx) => {
-          const submitted = guesses[rowIdx];
-          const displayLetters = submitted
-            ? submitted.guess
-            : rowIdx === guesses.length
-              ? current.padEnd(secretLength, " ")
-              : "".padEnd(secretLength, " ");
+            const isLastSubmittedRow =
+              submitted && rowIdx === guesses.length - 1;
 
-          const isLastSubmittedRow = submitted && rowIdx === guesses.length - 1;
+            return (
+              <div className="flex gap-0.5 sm:gap-1" key={rowIdx}>
+                {displayLetters.split("").map((ch, colIdx) => {
+                  const state = submitted ? submitted.result[colIdx] : "";
+                  const bg =
+                    state === "correct"
+                      ? "bg-green-700 border-green-700"
+                      : state === "present"
+                        ? "bg-yellow-700 border-yellow-700"
+                        : state === "absent"
+                          ? "bg-slate-700 border-slate-700"
+                          : "bg-slate-900 border-slate-600";
 
-          return (
-            <div className="flex gap-0.5 sm:gap-1" key={rowIdx}>
-              {displayLetters.split("").map((ch, colIdx) => {
-                const state = submitted ? submitted.result[colIdx] : "";
-                const bg =
-                  state === "correct"
-                    ? "bg-green-700 border-green-700"
-                    : state === "present"
-                      ? "bg-yellow-700 border-yellow-700"
-                      : state === "absent"
-                        ? "bg-slate-700 border-slate-700"
-                        : "bg-slate-900 border-slate-600";
-
-                return (
-                  <span key={colIdx} className="flex gap-1">
-                    {wordBreaks.includes(colIdx) && <span className="w-2 sm:w-3" />}
-                    <span
-                      style={isLastSubmittedRow ? { animationDelay: `${colIdx * 150}ms` } : {}}
-                      className={`w-8 h-9 sm:w-12 sm:h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
-                        isLastSubmittedRow ? "tile-flip" : ""
-                      }`}
-                    >
-                      {ch.trim()}
+                  return (
+                    <span key={colIdx} className="flex gap-1">
+                      {wordBreaks.includes(colIdx) && (
+                        <span className="w-2 sm:w-3" />
+                      )}
+                      <span
+                        style={
+                          isLastSubmittedRow
+                            ? { animationDelay: `${colIdx * 150}ms` }
+                            : {}
+                        }
+                        className={`w-8 h-9 sm:w-12 sm:h-12 flex text-xl text-yellow-100 items-center justify-center border-2 rounded font-bold  uppercase ${bg} ${
+                          isLastSubmittedRow ? "tile-flip" : ""
+                        }`}
+                      >
+                        {ch.trim()}
+                      </span>
                     </span>
-                  </span>
-                );
-              })}
-            </div>
-          );
-        })}
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <button
