@@ -6,6 +6,17 @@ export function normalize(s) {
     .replace(/[^A-Z]/g, "");
 }
 
+function getBrazilDateString() {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(now); // retorna algo tipo "2026-09-18"
+}
+
 export function getWordBreaks(rawName) {
   const upper = rawName.toUpperCase();
   const breaks = [];
@@ -18,8 +29,7 @@ export function getWordBreaks(rawName) {
 }
 
 export function dailySeed() {
-  const today = new Date();
-  const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  const dateStr = getBrazilDateString();
   let hash = 0;
   for (let i = 0; i < dateStr.length; i++) {
     hash = (hash * 31 + dateStr.charCodeAt(i)) >>> 0;

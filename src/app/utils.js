@@ -25,9 +25,19 @@ export function dailySeed() {
   return hash;
 }
 
+function getBrazilDateString() {
+  const now = new Date();
+  const formatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  return formatter.format(now); // retorna algo tipo "2026-09-18"
+}
+
 export function todayKey() {
-  const today = new Date();
-  return `termo-paises-${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+  return `termo-paises-${getBrazilDateString()}`;
 }
 
 export function evaluateGuess(guess, secret) {
