@@ -171,7 +171,7 @@ export default function Idiomale() {
 
       {!gameOver && (
         <div className="w-full max-w-md relative">
-          <div className="flex gap-2">
+          <div className="flex flex-col items-center sm:flex-row gap-2 w-full">
             <input
               type="text"
               value={current}
@@ -182,12 +182,12 @@ export default function Idiomale() {
               onFocus={() => setShowDropdown(true)}
               onKeyDown={handleKeyDown}
               placeholder="Nome do país"
-              className="flex-1 bg-slate-800 border-2 border-slate-700 focus:border-amber-600 outline-none rounded-lg px-4 py-3 text-white uppercase transition-colors"
+              className="w-full sm:flex-1 bg-slate-800 border-2 border-slate-700 focus:border-amber-600 outline-none rounded-lg px-4 py-3 text-white mb-1 uppercase transition-colors"
             />
             <button
               onClick={submitGuess}
               disabled={loading}
-              className="bg-amber-400 hover:bg-amber-300 text-yellow-900 hover:text-yellow-800 disabled:opacity-50 px-5 py-2 rounded-sm text-lg font-bold"
+              className="w-40 sm:w-auto bg-amber-400 hover:bg-amber-300 text-yellow-900 hover:text-yellow-800 disabled:opacity-50 px-5 py-3 rounded-lg text-lg font-bold whitespace-nowrap"
             >
               {loading ? "..." : "Enviar"}
             </button>

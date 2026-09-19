@@ -37,13 +37,18 @@ export default function HubHome() {
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center p-8 gap-10">
       <div className="text-center mt-8">
         <h1
-          className="text-5xl font-bold tracking-tight flex items-center justify-center gap-3"
+          className="text-4xl sm:text-5xl font-bold tracking-tight flex items-center justify-center gap-2"
           style={{ fontFamily: "var(--font-title)" }}
         >
-          <Earth className="text-amber-500" style={{ width: "0.85em", height: "0.85em" }} strokeWidth={2.5} />
+          <Earth
+            className="text-amber-500 flex-shrink-0 w-[72px] h-[72px] sm:w-16 sm:h-16"
+            strokeWidth={2.5}
+          />
           Jogos Diários
         </h1>
-        <p className="text-slate-400 mt-3">Um desafio novo a cada dia. De graça, sem cadastro.</p>
+        <p className="text-slate-400 mt-3">
+          Um desafio novo a cada dia. De graça, sem cadastro.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-2xl">
@@ -59,11 +64,15 @@ export default function HubHome() {
             >
               <div className="flex items-start justify-between">
                 <Icon
-                  className={game.available ? "text-amber-500" : "text-slate-600"}
+                  className={
+                    game.available ? "text-amber-500" : "text-slate-600"
+                  }
                   size={32}
                   strokeWidth={2}
                 />
-                {!game.available && <Lock className="text-slate-600" size={18} />}
+                {!game.available && (
+                  <Lock className="text-slate-600" size={18} />
+                )}
               </div>
               <h2 className="text-2xl font-bold mt-3">{game.name}</h2>
               <p className="text-slate-400 text-sm mt-1">{game.description}</p>
@@ -90,7 +99,9 @@ export default function HubHome() {
         })}
       </div>
 
-      <p className="text-slate-600 text-xs mt-4">Globale · {new Date().getFullYear()}</p>
+      <p className="text-slate-600 text-xs mt-4">
+        Globale · {new Date().getFullYear()}
+      </p>
     </div>
   );
 }
