@@ -37,7 +37,7 @@ export default function HubHome() {
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center p-8 gap-10">
       <div className="text-center mt-8">
         <h1
-          className="text-4xl sm:text-5xl font-bold tracking-tight flex items-center justify-center gap-0.5 sm:gap-2"
+          className="text-4xl sm:text-5xl font-bold tracking-tight flex items-center justify-center gap-0 sm:gap-2"
           style={{ fontFamily: "var(--font-title)" }}
         >
           <Earth
