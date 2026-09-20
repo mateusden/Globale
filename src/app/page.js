@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Earth, Languages, Swords, Flag, Lock } from "lucide-react";
+import MeridianoTitle from "./MeridianoTitle";
 
 const GAMES = [
   {
@@ -28,7 +29,7 @@ const GAMES = [
     name: "Bandeirale",
     description: "Adivinhe a bandeira histórica.",
     icon: Flag,
-    available: false,
+    available: true,
   },
 ];
 
@@ -36,16 +37,7 @@ export default function HubHome() {
   return (
     <div className="min-h-screen bg-slate-900 text-white flex flex-col items-center p-8 gap-10">
       <div className="text-center mt-8">
-        <h1
-          className="text-4xl sm:text-5xl font-bold tracking-tight flex items-center justify-center gap-0 sm:gap-2"
-          style={{ fontFamily: "var(--font-title)" }}
-        >
-          <Earth
-            className="text-amber-500 flex-shrink-0 w-[72px] h-[72px] sm:w-16 sm:h-16 "
-            strokeWidth={2.5}
-          />
-          Jogos Diários
-        </h1>
+        <MeridianoTitle />
         <p className="text-slate-400 mt-3">
           Um desafio novo a cada dia. De graça, sem cadastro.
         </p>
@@ -100,7 +92,7 @@ export default function HubHome() {
       </div>
 
       <p className="text-slate-600 text-xs mt-4">
-        Globale · {new Date().getFullYear()}
+        Meridiano · {new Date().getFullYear()}
       </p>
     </div>
   );

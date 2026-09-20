@@ -12,8 +12,8 @@ const titleFont = Space_Grotesk({
 });
 
 export const metadata = {
-  title: "Globale",
-  description: "Adivinhe o país do dia",
+  title: "Meridiano",
+  description: "Um desafio novo a cada dia — geografia, idiomas e história.",
 };
 
 export default function RootLayout({ children }) {
