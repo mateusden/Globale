@@ -212,7 +212,7 @@ export default function Idiomale() {
         </div>
       )}
 
-      <p className="text-sm h-6">{message}</p>
+      <p className="text-base h-6">{message}</p>
     </div>
   );
 }

@@ -11,6 +11,13 @@ function getBrazilDateString() {
   return formatter.format(now);
 }
 
+function normalizeText(s) {
+  return s
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
 export function dailySeed() {
   // soma um valor fixo pra não coincidir com o país do dia do Globale
   const dateStr = getBrazilDateString() + "-idiomale";
@@ -28,7 +35,7 @@ export function getSecretOfTheDay() {
 
 export function evaluateGuess(guessName, secretCountry) {
   const guessCountry = COUNTRIES_DATA.find(
-    (c) => c.name === guessName.toUpperCase()
+    (c) => normalizeText(c.name) === normalizeText(guessName)
   );
 
   if (!guessCountry) {

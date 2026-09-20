@@ -21,7 +21,7 @@ const GAMES = [
     name: "Conflitale",
     description: "Adivinhe o conflito histórico pela data.",
     icon: Swords,
-    available: false,
+    available: true,
   },
   {
     slug: "bandeirale",
