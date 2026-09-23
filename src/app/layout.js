@@ -14,6 +14,9 @@ const titleFont = Space_Grotesk({
 export const metadata = {
   title: "Meridiano",
   description: "Um desafio novo a cada dia — geografia, idiomas e história.",
+  icons: {
+    icon: '/compass.ico'
+  }
 };
 
 export default function RootLayout({ children }) {
