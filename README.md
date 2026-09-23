@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Meridiano
 
-## Getting Started
+Um hub de jogos diários de geografia, idiomas e história, inspirado em jogos como Termo e Worldle.
 
-First, run the development server:
+## Jogos disponíveis
 
-```bash
+- **Globale** — Adivinhe o país do dia, letra por letra.
+- **Idiomale** — Adivinhe o país pela frase no idioma local.
+- **Conflitale** — Adivinhe o ano de início de um conflito histórico.
+- **Bandeirale** — Adivinhe o país ou entidade histórica pela bandeira.
+
+## Tecnologias
+
+- [Next.js](https://nextjs.org/) (App Router)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Lucide React](https://lucide.dev/) (ícones)
+- Hospedado na [Vercel](https://vercel.com/)
+
+## Rodando localmente
+
+\`\`\`bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Estrutura
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Cada jogo vive em sua própria pasta dentro de `src/app/`, com sua própria lógica de API (`api/`), garantindo que a resposta do dia fique no servidor, não exposta no navegador.
 
-## Learn More
+O horário de troca da palavra/desafio do dia é calculado com base no fuso de Brasília (America/Sao_Paulo), independente de onde o servidor estiver hospedado.
 
-To learn more about Next.js, take a look at the following resources:
+## Créditos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+As bandeiras usadas no Bandeirale vêm do Wikimedia Commons, sob licenças Creative Commons ou domínio público. Créditos de atribuição, quando exigidos pela licença, estão documentados como comentários dentro de cada arquivo `.svg` em `public/flags/`.

@@ -6,6 +6,10 @@ export async function POST(request) {
   const secret = getSecretOfTheDay();
   const result = evaluateGuess(guess, secret);
 
+  if (result.error) {
+    return NextResponse.json({ error: result.error }, { status: 400 });
+  }
+
   return NextResponse.json({
     guess,
     won: result.won,

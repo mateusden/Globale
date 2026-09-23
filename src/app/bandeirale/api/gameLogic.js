@@ -38,16 +38,15 @@ function getStartYear(period) {
 }
 
 export function evaluateGuess(guessName, secret) {
-  const won = normalizeText(guessName) === normalizeText(secret.name);
-
   const guessEntry = FLAGS_DATA.find(
     (f) => normalizeText(f.name) === normalizeText(guessName)
   );
 
   if (!guessEntry) {
-    return { won, regionMatch: null, yearDirection: null };
+    return { error: "Essa entidade não está na lista. Escolha uma das sugestões." };
   }
 
+  const won = normalizeText(guessName) === normalizeText(secret.name);
   const regionMatch = guessEntry.region === secret.region;
 
   const guessYear = getStartYear(guessEntry.period);

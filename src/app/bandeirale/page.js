@@ -73,6 +73,11 @@ export default function Bandeirale() {
     const data = await res.json();
     setLoading(false);
 
+    if (data.error) {
+      setMessage(data.error)
+      return
+    }
+
     const newGuesses = [...guesses, data];
     setGuesses(newGuesses);
     setCurrent("");
@@ -110,7 +115,7 @@ export default function Bandeirale() {
 
       <BandeiraleTitle />
       <p className="text-slate-400 mb-2 text-sm text-center max-w-md">
-        Que país/entidade histórica é essa bandeira?
+        Essa bandeira pertence a que país histórico?
       </p>
 
       <div className="relative bg-slate-800 border-2 border-amber-700/40 rounded-xl p-6 max-w-md shadow-lg w-full">
