@@ -1,18 +1,16 @@
 import { Swords } from "lucide-react";
 
 export default function ConflitaleTitle() {
-    return (
-        <h1
-            className="flex items-center justify-center text-5xl font-bold tracking-tight text-white"
-            style={{ fontFamily: "var(--font-title", gap: "0.05em" }}
-        >
-            <span>CONFLITA</span>
-            <Swords
-                className="text-amber-600"
-                style={{ width: "0.9em", height: "0.9em"}}
-                strokeWidth={2.5}
-            />
-            <span>LE</span>
-        </h1>
-    )
+  return (
+    <h1
+      className="flex items-center justify-center text-4xl sm:text-5xl font-black tracking-tight text-slate-950 select-none my-1"
+      style={{ fontFamily: "var(--font-title)" }}
+    >
+      <span>CONFLITA</span>
+      <span className="inline-flex items-center justify-center mx-1 p-1 sm:p-1.5 bg-orange-400 rounded-xl border-3 border-slate-950 shadow-[2.5px_2.5px_0px_0px_#000] text-slate-950 hover:rotate-6 transition-transform">
+        <Swords className="w-7 h-7 sm:w-9 sm:h-9" strokeWidth={2.8} />
+      </span>
+      <span>LE</span>
+    </h1>
+  );
 }

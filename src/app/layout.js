@@ -1,5 +1,6 @@
 import { Google_Sans_Flex, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/Navbar";
 
 const googleSansFlex = Google_Sans_Flex({
   subsets: ["latin"],
@@ -22,7 +23,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
-      <body className={`${googleSansFlex.className} ${titleFont.variable}`}>{children}</body>
+      <body className={`${googleSansFlex.className} ${titleFont.variable}`}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

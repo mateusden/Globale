@@ -1,121 +1,142 @@
 import Link from "next/link";
-import { Earth, Languages, Swords, Flag, Lock } from "lucide-react";
-import MeridianoTitle from "./MeridianoTitle";
+import { Earth, Languages, Swords, Flag, Lock, ArrowUpRight } from "lucide-react";
 
 const GAMES = [
   {
     slug: "globale",
     name: "Globale",
+    tagline: "Geografia",
     description: "Adivinhe o país do dia, letra por letra.",
     icon: Earth,
-    bg: "bg-sky-200 border-3 border-sky-400",
-    badge: "bg-sky-400",
-    iconColor: "text-wheat",
+    cardBg: "bg-sky-200 hover:bg-sky-300",
+    badgeBg: "bg-sky-400",
     available: true,
   },
   {
     slug: "idiomale",
     name: "Idiomale",
+    tagline: "Idiomas",
     description: "Adivinhe o país pelo idioma da frase.",
     icon: Languages,
-    bg: "bg-emerald-200 border-3 border-emerald-400",
-    badge: "bg-emerald-400",
-    iconColor: "text-wheat",
+    cardBg: "bg-emerald-200 hover:bg-emerald-300",
+    badgeBg: "bg-emerald-400",
     available: true,
   },
   {
     slug: "conflitale",
     name: "Conflitale",
+    tagline: "História",
     description: "Adivinhe o ano de início de um conflito histórico.",
     icon: Swords,
-    bg: "bg-rose-200 border-3 border-rose-400",
-    badge: "bg-rose-400",
-    iconColor: "text-wheat",
+    cardBg: "bg-rose-200 hover:bg-rose-300",
+    badgeBg: "bg-rose-400",
     available: true,
   },
   {
     slug: "bandeirale",
     name: "Bandeirale",
-    description: "Adivinhe o país ou entidade pela bandeira histórica.",
+    tagline: "Bandeiras",
+    description: "Adivinhe o país pela bandeira histórica.",
     icon: Flag,
-    bg: "bg-amber-200 border-3 border-amber-400",
-    badge: "bg-amber-400",
-    iconColor: "text-wheat",
+    cardBg: "bg-amber-200 hover:bg-amber-300",
+    badgeBg: "bg-amber-400",
     available: true,
   },
 ];
 
 export default function HubHome() {
   return (
-    <div className="min-h-screen bg-slate-800 text-white flex flex-col items-center p-8 gap-10">
-      <div className="max-w-md text-center mt-8">
-        <MeridianoTitle />
-        <p className="text-slate-400 mt-4 leading-relaxed">
-          No <span className="text-white font-bold">Meridiano</span>, você
-          encontra desafios diários de geografia, idiomas e história. Um jogo
-          novo a cada dia.
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col items-center justify-between p-4 sm:p-8">
+      
+      {/* Cabeçalho */}
+      <header className="w-full max-w-4xl mt-4 mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 px-2">
+        <div>
+          <span className="inline-block px-3 py-1 bg-amber-400 text-slate-950 font-black text-xs tracking-wider uppercase rounded-md border-2 border-slate-950 mb-2 shadow-[2px_2px_0px_0px_#000]">
+            Jogos Diários
+          </span>
+          <h1
+            className="text-5xl sm:text-6xl font-black text-white tracking-tight"
+            style={{ fontFamily: "var(--font-title)" }}
+          >
+            Meridiano
+          </h1>
+        </div>
 
-      {/* Painel claro contendo os cards */}
-      <div className="w-full max-w-3xl border-5 border-slate-950 bg-[#f5e9d8] rounded-3xl p-8 shadow-2xl">
+        <p className="text-slate-300 text-base sm:text-lg leading-relaxed max-w-md sm:text-right">
+          No <strong className="text-amber-300">Meridiano</strong>, você encontra desafios diários de geografia, idiomas e história. Um jogo novo a cada dia, de graça.
+        </p>
+      </header>
+
+      {/* Card Bege Neobrutalista */}
+      <main className="w-full max-w-4xl bg-[#f6f0e8] border-4 border-slate-950 rounded-3xl p-6 sm:p-10 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {GAMES.map((game) => {
             const Icon = game.icon;
+
             const content = (
               <div
-                className={`relative rounded-2xl p-6 h-full flex flex-col items-center text-center transition-all duration-300 ease-out ${
+                className={`relative rounded-2xl p-6 h-full flex flex-col justify-between border-4 border-slate-950 transition-all duration-200 ${
                   game.available
-                    ? `${game.bg} hover:-translate-y-1 hover:-rotate-2 hover:scale-103  cursor-pointer shadow-md`
-                    : "bg-black/5 opacity-50 cursor-not-allowed"
+                    ? `${game.cardBg} hover:-translate-y-1.5 hover:-rotate-1 cursor-pointer shadow-[5px_5px_0px_0px_#0f172a]`
+                    : "bg-slate-300/60 border-slate-500 opacity-60 cursor-not-allowed shadow-[3px_3px_0px_0px_#64748b]"
                 }`}
               >
-                <div
-                  className={`w-18 h-18 rounded-full flex items-center justify-center mb-3 border-4 border-white shadow-sm ${
-                    game.available ? game.badge : "bg-black/10"
-                  }`}
-                >
-                  <Icon
-                    className={game.available ? game.iconColor : "text-black/30"}
-                    size={28}
-                    strokeWidth={2}
-                  />
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center border-4 border-slate-950 text-slate-950 shadow-[2px_2px_0px_0px_#0f172a] ${
+                        game.available ? game.badgeBg : "bg-slate-400"
+                      }`}
+                    >
+                      <Icon size={28} strokeWidth={2.5} />
+                    </div>
+
+                    <span className="text-xs font-black uppercase text-slate-950 bg-white/90 px-2.5 py-1 rounded-md border-2 border-slate-950">
+                      {game.tagline}
+                    </span>
+                  </div>
+
+                  <h2 className="text-2xl font-black text-slate-950 tracking-tight">
+                    {game.name}
+                  </h2>
+                  <p className="text-slate-800 font-semibold text-sm mt-1 leading-snug">
+                    {game.description}
+                  </p>
                 </div>
 
-                <h2 className="text-xl font-extrabold text-slate-800">{game.name}</h2>
-                <p className="text-slate-700 text-sm mt-1 mb-4">{game.description}</p>
-
-                {game.available ? (
-                  <span className="bg-slate-800 border-1 border-slate-950 text-white text-sm font-bold px-5 py-2 rounded-full mt-auto">
-                    Jogar Agora
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1 text-slate-500 text-xs font-bold mt-auto">
-                    <Lock size={14} /> EM BREVE
-                  </span>
-                )}
+                <div className="mt-6 pt-4 border-t-2 border-slate-950/20 flex items-center justify-between">
+                  {game.available ? (
+                    <span className="w-full inline-flex items-center justify-center gap-2 bg-slate-950 text-white font-bold text-sm px-5 py-2.5 rounded-xl border-2 border-slate-950 hover:bg-slate-800 transition-colors shadow-[2px_2px_0px_0px_#0f172a]">
+                      Jogar Agora <ArrowUpRight size={16} />
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1.5 text-slate-700 font-extrabold text-xs uppercase tracking-wider">
+                      <Lock size={14} /> Em Breve
+                    </span>
+                  )}
+                </div>
               </div>
             );
 
             return game.available ? (
-              <Link href={`/${game.slug}`} key={game.slug}>
+              <Link href={`/${game.slug}`} key={game.slug} className="h-full">
                 {content}
               </Link>
             ) : (
-              <div key={game.slug}>{content}</div>
+              <div key={game.slug} className="h-full">
+                {content}
+              </div>
             );
           })}
         </div>
-      </div>
+      </main>
 
-      <footer className="w-full max-w-3xl border-t border-slate-800 pt-6 mt-2 text-center">
-        <p className="text-slate-500 text-sm">
-          Feito com curiosidade por geografia e história.
-        </p>
-        <p className="text-slate-600 text-xs mt-2">
-          Meridiano · {new Date().getFullYear()}
-        </p>
+      {/* Rodapé */}
+      <footer className="w-full max-w-4xl pt-8 mt-6 text-center text-slate-400 text-xs sm:text-sm space-y-1">
+        <p>Feito com curiosidade por geografia, idiomas e história do mundo.</p>
+        <p className="text-slate-500 font-medium">Meridiano · {new Date().getFullYear()}</p>
       </footer>
+
     </div>
   );
 }

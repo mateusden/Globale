@@ -3,7 +3,7 @@ import { Compass } from "lucide-react";
 export default function MeridianoTitle() {
   return (
     <h1
-      className="flex items-center justify-center sm:text-5xl text-4xl font-bold tracking-tight text-white gap-0.5"
+      className="flex items-center text-slate-50 justify-center sm:text-5xl text-4xl font-bold tracking-tight text-white gap-0.5"
       style={{ fontFamily: "var(--font-title)" }}
     >
       <span>Meridian</span>
