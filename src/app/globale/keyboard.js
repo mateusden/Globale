@@ -10,16 +10,16 @@ const ROWS = [
 
 export default function Keyboard({ onKeyPress, onBackspace, keyStates = {} }) {
   return (
-    <div className="w-full max-w-[420px] mx-auto flex flex-col gap-1.5 p-1.5 sm:p-3 bg-slate-900 rounded-2xl border-3 border-slate-950 shadow-[4px_4px_0px_0px_#000] mt-4">
-      {/* Linha 1 (10 teclas = 10 unidades) */}
-      <div className="flex justify-center gap-1 w-full">
+    <div className="w-full max-w-[420px] mx-auto flex flex-col gap-1.5 p-1 sm:p-3 bg-slate-900 rounded-2xl border-3 border-slate-950 shadow-[4px_4px_0px_0px_#000] mt-4">
+      {/* Linha 1 */}
+      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
         {ROWS[0].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
         ))}
       </div>
 
-      {/* Linha 2 (0.5 + 9 teclas + 0.5 = 10 unidades) */}
-      <div className="flex justify-center gap-1 w-full">
+      {/* Linha 2 */}
+      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
         <div className="flex-[0.5]" />
         {ROWS[1].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
@@ -27,9 +27,8 @@ export default function Keyboard({ onKeyPress, onBackspace, keyStates = {} }) {
         <div className="flex-[0.5]" />
       </div>
 
-      {/* Linha 3 (1.5 + 7 teclas + 1.5 botão = 10 unidades) */}
-      <div className="flex justify-center gap-1 w-full">
-        <div className="flex-[1.5]" />
+      {/* Linha 3 */}
+      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
         {ROWS[2].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
         ))}
