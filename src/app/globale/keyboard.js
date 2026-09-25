@@ -10,32 +10,32 @@ const ROWS = [
 
 export default function Keyboard({ onKeyPress, onBackspace, keyStates = {} }) {
   return (
-    <div className="w-full max-w-[420px] mx-auto flex flex-col gap-1.5 p-1 sm:p-3 bg-slate-900 rounded-2xl border-3 border-slate-950 shadow-[4px_4px_0px_0px_#000] mt-4">
+    /* w-fit faz o bloco escuro abraçar exatamente o tamanho total das teclas */
+    <div className="w-fit mx-auto flex flex-col gap-1.5 p-2 bg-slate-900 rounded-2xl border-3 border-slate-950 shadow-[4px_4px_0px_0px_#000] mt-4">
       {/* Linha 1 */}
-      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
+      <div className="flex justify-center gap-1 w-full">
         {ROWS[0].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
         ))}
       </div>
 
       {/* Linha 2 */}
-      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
-        <div className="flex-[0.5]" />
+      <div className="flex justify-center gap-1 w-full">
         {ROWS[1].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
         ))}
-        <div className="flex-[0.5]" />
       </div>
 
       {/* Linha 3 */}
-      <div className="flex justify-center gap-0.5 sm:gap-1.5 w-full">
+      <div className="flex justify-center gap-1 w-full">
         {ROWS[2].map((ch) => (
           <KeyButton key={ch} ch={ch} onKeyPress={onKeyPress} state={keyStates[ch]} />
         ))}
+        {/* Lixeira proporcional (38px * 1.5 = 57px) */}
         <button
           onClick={onBackspace}
           aria-label="Apagar letra"
-          className="flex-[1.5] min-w-0 h-10 sm:h-12 bg-rose-400 hover:bg-rose-300 text-slate-950 rounded-xl border-2 border-slate-950 font-black shadow-[1.5px_1.5px_0px_0px_#000] active:translate-y-0.5 transition-all flex items-center justify-center cursor-pointer shrink-0"
+          className="w-[57px] sm:w-16 h-10 sm:h-12 bg-rose-400 hover:bg-rose-300 text-slate-950 rounded-xl border-2 border-slate-950 font-black shadow-[1.5px_1.5px_0px_0px_#000] active:translate-y-0.5 transition-all flex items-center justify-center cursor-pointer shrink-0"
         >
           <Delete size={18} strokeWidth={2.5} />
         </button>
@@ -57,7 +57,8 @@ function KeyButton({ ch, onKeyPress, state }) {
   return (
     <button
       onClick={() => onKeyPress(ch)}
-      className={`flex-1 min-w-0 h-10 sm:h-12 rounded-xl border-2 border-slate-950 font-black text-xs sm:text-base shadow-[1.5px_1.5px_0px_0px_#000] active:translate-y-0.5 transition-all flex items-center justify-center cursor-pointer ${bg}`}
+      /* Mude o w-[38px] para testar: 35px, 36px, 38px, 40px... */
+      className={`w-[38px] sm:w-11 h-10 sm:h-12 rounded-xl border-2 border-slate-950 font-black text-xs sm:text-base shadow-[1.5px_1.5px_0px_0px_#000] active:translate-y-0.5 transition-all flex items-center justify-center cursor-pointer shrink-0 ${bg}`}
     >
       {ch}
     </button>
